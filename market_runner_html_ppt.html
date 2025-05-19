@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Runner Platform - Business Model Presentation</title>
+    <style>
+        :root {
+            --primary-color: #1e88e5;
+            --secondary-color: #26a69a;
+            --accent-color: #ff8f00;
+            --text-color: #333;
+            --light-text: #fff;
+            --slide-bg: #f9f9f9;
+            --transition-speed: 0.5s;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #222;
+            color: var(--text-color);
+            overflow: hidden;
+        }
+        
+        #presentation {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: var(--slide-bg);
+            transition: transform var(--transition-speed) ease-in-out;
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            transform: translateX(100%);
+        }
+        
+        .slide.active {
+            transform: translateX(0);
+            z-index: 10;
+        }
+        
+        .slide.prev {
+            transform: translateX(-100%);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .slide-number {
+            font-size: 16px;
+            color: #777;
+        }
+        
+        .title {
+            font-size: 42px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            font-size: 28px;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .text-large {
+            font-size: 24px;
+            line-height: 1.5;
+        }
+        
+        .text-medium {
+            font-size: 20px;
+            line-height: 1.4;
+        }
+        
+        ul, ol {
+            padding-left: 40px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
+        .two-column {
+            display: flex;
+            gap: 40px;
+        }
+        
+        .column {
+            flex: 1;
+        }
+        
+        .highlight-box {
+            background-color: rgba(30, 136, 229, 0.1);
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .accent-text {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+        
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            color: #777;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .control-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .control-btn:hover {
+            background-color: #1565c0;
+        }
+        
+        .cover-slide {
+            background: linear-gradient(135deg, #1e88e5, #26a69a);
+            color: white;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .cover-slide .title {
+            color: white;
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+        
+        .cover-slide .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            font-size: 36px;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+        }
+        
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+        }
+        
+        .timeline-item {
+            flex: 1;
+            text-align: center;
+            padding: 0 15px;
+            position: relative;
+        }
+        
+        .timeline-item:not(:last-child):after {
+            content: "";
+            position: absolute;
+            top: 20px;
+            right: 0;
+            height: 2px;
+            width: 100%;
+            background-color: #ddd;
+            z-index: -1;
+        }
+        
+        .timeline-point {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            margin: 0 auto 15px;
+        }
+        
+        .timeline-label {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .value-prop-box {
+            background-color: rgba(38, 166, 154, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .value-prop-title {
+            color: var(--secondary-color);
+            font-size: 22px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .thank-you-slide {
+            background: linear-gradient(135deg, #26a69a, #1e88e5);
+            color: white;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .thank-you-slide .title {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="presentation">
+        <!-- Slide 1: Cover -->
+        <div class="slide cover-slide active">
+            <div class="content">
+                <h1 class="title">Market Runner Platform</h1>
+                <h2 class="subtitle">Business Model Presentation</h2>
+                <p class="text-medium">Group Assignment</p>
+                <p class="text-medium">May 21, 2025</p>
+            </div>
+        </div>
+        
+        <!-- Slide 2: Our Vision -->
+        <div class="slide">
+            <div class="header">
+                <div class="logo">Market Runner Platform</div>
+                <div class="slide-number">2/16</div>
+            </div>
+            <div class="content text-center">
+                <h2 class="section-title">Our Vision</h2>
+                <p class="text-large accent-text">Making local market shopping in Zanzibar easier and more efficient</p>
+                <div class="highlight-box text-medium">
+                    A digital platform connecting customers with local 'runners' who purchase and deliver groceries from nearby markets
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 3: The Problem -->
+        <div class="slide">
+            <div class="header">
+                <div class="logo">Market Runner Platform</div>
+                <div class="slide-number">3/16</div>
+            </div>
+            <div class="content">
+                <h2 class="section-title">The Problem</h2>
+                <ul>
+                    <li>Busy professionals lack time for market shopping</li>
+                    <li>Elderly residents face mobility challenges</li>
+                    <li>Tourists are unfamiliar with local markets and vendors</li>
+                    <li>Traditional markets remain essential but can be inaccessible</li>
+                    <li>Limited delivery options from local vendors</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Slide 4: Our Solution -->
+        <div class="slide">
+            <div class="header">
+                <div class="logo">Market Runner Platform</div>
+                <div class="slide-number">4/16</div>
+            </div>
+            <div class="content">
+                <h2 class="section-title">Our Solution: Market Runner Platform</h2>
+                <p class="text-medium">A community-driven digital service that:</p>
+                <ul>
+                    <li>Connects customers to local shoppers ("runners")</li>
+                    <li>Facilitates grocery delivery from traditional markets</li>
+                    <li>Preserves market culture while adding modern convenience</li>
+                    <li>Creates income opportunities</li>
+                    <li>Supports local vendors</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Slide 5: How It Works -->
+        <div class="slide">
+            <div class="header">
+                <div class="logo">Market Runner Platform</div>
+                <div class="slide-number">5/16</div>
+            </div>
+            <div class="content">
+                <h2 class="section-title">How It Works</h2>
+                <ol>
+                    <li>Customer submits shopping request through website</li>
+                    <li>Local runner accepts the order</li>
+                    <li>Runner purchases items from traditional market vendors</li>
+                    <li>Runner delivers groceries to customer's doorstep</li>
+                    <li>Customer pays through the platform</li>
+                    <li>Platform distributes payment to runner and vendors</li>
+                </ol>
+            </div>
+        </div>
+        
+        <!-- Slide 6: Target Customers -->
+        <div class="slide">
+            <div class="header">
+                <div class="logo">Market Runner Platform</div>
+                <div class="slide-number">6/16</div>
+            </div>
+            <div class="content">
+                <h2 class="section-title">Target Customers</h2>
+                <ul>
+                    <li><strong>Busy Professionals</strong> - Need time-saving solutions</li>
+                    <li><strong>Elderly Residents</strong> - Face mobility challenges</li>
+                    <li><strong>Tourists</strong> - Unfamiliar with local shopping options</li>
+                    <li><strong>Expats</strong> - Desire local produce but lack market knowledge</li>
+                    <li><strong>Anyone</strong> - Seeking convenience without sacrificing quality</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Slide 7: Value Proposition -->
+        <div class="slide">
+            <div class="header">
+                <div class="logo">Market Runner Platform</div>
+                <div class="slide-number">7/16</div>
+            </div>
+            <div class="content">
+                <h2 class="section-title">Value Proposition</h2>
+                <div class="two-column">
+                    <div class="column">
+                        <div class="value-prop-box">
+                            <h3 class="value-prop-title">For Customers:</h3>
+                            <ul>
+                                <li>Time and effort savings</li>
+                                <li>Access to fresh, local market produce</li>
+                                <li>Personalized shopping experience</li>
+                                <li>Convenience without premium pricing</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="value-prop-box">
+                            <h3 class="value-prop-title">For Runners:</h3>
+                            <ul>
+                                <li>Flexible income opportunities</li>
+                                <li>Utilization of local knowledge</li>
+                                <li>Low barrier to entry employment</li>
+                            </ul>
+                        </div>
+                        <div class="value-prop-box">
+                            <h3 class="value-prop-title">For Vendors:</h3>
+                            <ul>
+                                <li>Expanded customer reach</li>
+                                <li>No need to digitize individually</li>
+                                <li>Preservation of traditional business model</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 8: Key Resources -->
+        <div class="slide">
+            <div class="header">
+                <div class="logo">Market Runner Platform</div>
+                <div class="slide-number">8/16</div>
+            </div>
+            <div class="content">
+                <h2 class="section-title">Key Resources</h2>
+                <ul>
+                    <li>Web platform/application</li>
+                    <li>Network of verified runners</li>
+                    <li>Partnerships with local markets</li>
+                    <li>Payment processing system</li>
+                    <li>Customer service team</li>
+                    <li>Delivery logistics coordination</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Slide 9: Revenue Model -->
+        <div class="slide">
+            <div class="header">
+                <div class="logo">Market Runner Platform</div>
+                <div class="slide-number">9/16</div>
+            </div>
+            <div class="content">
+                <h2 class="section-title">Revenue Model</h2>
+                <ul>
+                    <li><strong>Service Fee</strong>: 10-15% added to order total</li>
+                    <li><strong>Premium Subscriptions</strong>: Monthly fee for reduced service charges</li>
+                    <li><strong>Featured Vendor Placements</strong>: Optional promotional opportunities</li>
+                    <li><strong>Market Tours</strong>: Optional add-on service for tourists</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Slide 10: Cost Structure -->
+        <div class="slide">
+            <div class="header">
+                <div class="logo">Market Runner Platform</div>
+                <div class="slide-number">10/16</div>
+            </div>
+            <div class="content">
+                <h2 class="section-title">Cost Structure</h2>
+                <ul>
+                    <li>Platform development and maintenance</li>
+                    <li>Runner compensation (60-70% of service fee)</li>
+                    <li>Payment processing fees</li>
+                    <li>Marketing and customer acquisition</li>
+                    <li>Operational staff</li>
+                    <li>Insurance and contingencies</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Slide 11: Key Partnerships -->
+        <div class="slide">
+            <div class="header">
+                <div class="logo">Market Runner Platform</div>
+                <div class="slide-number">11/16</div>
+            </div>
+            <div class="content">
+                <h2 class="section-title">Key Partnerships</h2>
+                <ul>
+                    <li>Local market associations</li>
+                    <li>Tourism boards and hotels</li>
+                    <li>Transportation services</li>
+                    <li>Payment processors</li>
+                    <li>Local government authorities</li>
+                    <li>Community organizations</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Slide 12: Competitive Advantage -->
+        <div class="slide">
+            <div class="header">
+                <div class="logo">Market Runner Platform</div>
+                <div class="slide-number">12/16</div>
+            </div>
+            <div class="content">
+                <h2 class="section-title">Competitive Advantage</h2>
+                <ul>
+                    <li><strong>Hyper-Local Focus</strong>: Deep understanding of Zanzibar markets</li>
+                    <li><strong>Community Integration</strong>: Supporting existing market structures</li>
+                    <li><strong>Dual Impact</strong>: Economic opportunities + consumer convenience</li>
+                    <li><strong>Authenticity</strong>: Preserving cultural shopping experience</li>
+                    <li><strong>Accessibility</strong>: Simple platform design for all tech comfort levels</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Slide 13: Market Opportunity -->
+        <div class="slide">
+            <div class="header">
+                <div class="logo">Market Runner Platform</div>
+                <div class="slide-number">13/16</div>
+            </div>
+            <div class="content">
+                <h2 class="section-title">Market Opportunity</h2>
+                <ul>
+                    <li>Growing tourism in Zanzibar</li>
+                    <li>Increasing demand for convenience services</li>
+                    <li>Limited existing delivery infrastructure</li>
+                    <li>Rising smartphone penetration</li>
+                    <li>Support for local businesses post-pandemic</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Slide 14: Implementation Timeline -->
+        <div class="slide">
+            <div class="header">
+                <div class="logo">Market Runner Platform</div>
+                <div class="slide-number">14/16</div>
+            </div>
+            <div class="content">
+                <h2 class="section-title">Implementation Timeline</h2>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-point">1</div>
+                        <div class="timeline-label">Phase 1 (3 months)</div>
+                        <ul>
+                            <li>Platform development</li>
+                            <li>Runner recruitment and training</li>
+                            <li>Initial market partnerships</li>
+                        </ul>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-point">2</div>
+                        <div class="timeline-label">Phase 2 (6 months)</div>
+                        <ul>
+                            <li>Pilot launch in Stone Town</li>
+                            <li>Feedback collection and iteration</li>
+                            <li>Expansion of runner network</li>
+                        </ul>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-point">3</div>
+                        <div class="timeline-label">Phase 3 (12 months)</div>
+                        <ul>
+                            <li>Island-wide expansion</li>
+                            <li>Additional service offerings</li>
+                            <li>Tourism partnerships</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 15: Social Impact -->
+        <div class="slide">
+            <div class="header">
+                <div class="logo">Market Runner Platform</div>
+                <div class="slide-number">15/16</div>
+            </div>
+            <div class="content">
+                <h2 class="section-title">Social Impact</h2>
+                <ul>
+                    <li>Creating flexible employment opportunities</li>
+                    <li>Supporting traditional market ecosystem</li>
+                    <li>Improving access for elderly and disabled</li>
+                    <li>Reducing overall transportation needs</li>
+                    <li>Strengthening local economic circulation</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Slide 16: Future Expansion -->
+        <div class="slide">
+            <div class="header">
+                <div class="logo">Market Runner Platform</div>
+                <div class="slide-number">16/16</div>
+            </div>
+            <div class="content">
+                <h2 class="section-title">Future Expansion Opportunities</h2>
+                <ul>
+                    <li>Specialized product categories (spices, crafts)</li>
+                    <li>Recipe boxes with pre-selected ingredients</li>
+                    <li>Virtual market tours for overseas customers</li>
+                    <li>Expansion to neighboring islands and regions</li>
+                    <li>Value-added processing of local produce</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Slide 17: Thank You -->
+        <div class="slide thank-you-slide">
+            <div class="content text-center">
+                <h1 class="title">Thank You!</h1>
+                <p class="text-large">Market Runner Platform</p>
+                <p class="text-medium">Connecting communities through convenience</p>
+                <p class="text-medium" style="margin-top: 40px;">Questions?</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button id="prev" class="control-btn">Previous</button>
+        <button id="next" class="control-btn">Next</button>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prev');
+            const nextBtn = document.getElementById('next');
+            let currentSlide = 0;
+            
+            function updateSlides() {
+                slides.forEach((slide, index) => {
+                    slide.classList.remove('active', 'prev');
+                    
+                    if (index === currentSlide) {
+                        slide.classList.add('active');
+                    } else if (index < currentSlide) {
+                        slide.classList.add('prev');
+                    }
+                });
+                
+                // Update button states
+                prevBtn.disabled = currentSlide === 0;
+                nextBtn.disabled = currentSlide === slides.length - 1;
+            }
+            
+            prevBtn.addEventListener('click', function() {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    updateSlides();
+                }
+            });
+            
+            nextBtn.addEventListener('click', function() {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    updateSlides();
+                }
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    if (currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        updateSlides();
+                    }
+                } else if (e.key === 'ArrowLeft') {
+                    if (currentSlide > 0) {
+                        currentSlide--;
+                        updateSlides();
+                    }
+                }
+            });
+            
+            // Initialize
+            updateSlides();
+        });
+    </script>
+</body>
+</html>
